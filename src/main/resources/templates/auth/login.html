@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pieteikšanās | Apģērbu meklētājs</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+
+<header class="galvene">
+    <div class="konteiners galvenes-saturs">
+        <a th:href="@{/login}" class="logotips">Apģērbu meklētājs</a>
+    </div>
+</header>
+
+<main class="konteiners galvenais-saturs">
+    <section class="auth-karte">
+        <h1>Pieteikšanās</h1>
+        <p class="apaksteksts">Lai ienāktu kontā, ir jāautorizējas</p>
+
+        <p th:if="${param.required != null}" class="zinojums zinojums-info">
+            Meklēšanas vēsture un izlase ir pieejamas tikai reģistrētiem lietotājiem. Lūdzu, piesakies.
+        </p>
+        <p th:if="${error}" class="zinojums zinojums-kluda" th:text="${error}"></p>
+        <p th:if="${success}" class="zinojums zinojums-ok" th:text="${success}"></p>
+
+        <form th:action="@{/login}" method="post" class="auth-forma">
+            <label for="username">Lietotājvārds</label>
+            <input id="username" name="username" type="text" th:value="${username}"
+                   required autofocus autocomplete="username">
+
+            <label for="password">Parole</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password">
+
+            <button type="submit">Pieteikties</button>
+        </form>
+
+        <p class="auth-saites">Nav konta? <a th:href="@{/register}">Reģistrēties</a></p>
+        <p class="viesa-saite"><a th:href="@{/guest}">Ieiet kā viesis</a></p>
+    </section>
+</main>
+
+<footer class="kajene">
+    <p>© 2026 Sieriņi | Apģērbu meklētājs</p>
+</footer>
+
+</body>
+</html>
