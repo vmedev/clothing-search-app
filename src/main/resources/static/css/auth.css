@@ -1,0 +1,25 @@
+/* Pieteikšanās un reģistrācija. Krāsas ņemtas no kopīgā style.css. */
+.auth-karte {
+    max-width: 420px;
+    margin: 0 auto;
+    background-color: #edddc8;
+    border: 1px solid #bdae9c;
+    border-radius: 14px;
+    padding: 32px 28px;
+}
+.auth-karte h1 { margin-bottom: 4px; }
+.apaksteksts { color: #6c594b; }
+.auth-forma { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.auth-forma label { margin-top: 8px; font-size: 15px; color: #5e4a3d; }
+.auth-forma button { margin-top: 18px; width: 100%; }
+.mazs { font-size: 13px; color: #6c594b; }
+.auth-saites { text-align: center; margin: 18px 0 4px; }
+.auth-saites a { color: #9f7553; }
+.viesa-saite { text-align: center; font-size: 13px; margin: 0; }
+.viesa-saite a { color: #6c594b; }
+.viesa-saite a:hover, .auth-saites a:hover { color: #583e2a; }
+
+.zinojums { padding: 10px 14px; border-radius: 8px; }
+.zinojums-kluda { background-color: #f1d6cc; color: #7a3424; }
+.zinojums-ok    { background-color: #dfe5cf; color: #445229; }
+.zinojums-info  { background-color: #f1e5d6; color: #5e4a3d; border: 1px solid #bdae9c; }
