@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-// Lietotāja izlasei pievienota prece
+/** Lietotāja izlasei pievienota prece. */
 @Entity
 @Table(name = "favorite",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "product_id"}))

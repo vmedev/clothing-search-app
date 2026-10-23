@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-// Lietotāja izlase
+/** Lietotāja izlase. */
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
-    // Izlases lapai: jaunākas preces pirmās
+    /** Izlases lapai: jaunākas preces pirmās. */
     List<Favorite> findByUserIdOrderByCreatedAtDesc(Long userId);
 
     boolean existsByUserIdAndProductId(Long userId, Long productId);

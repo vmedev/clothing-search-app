@@ -2,7 +2,7 @@ package lv.rtu.clothingsearchapp.model;
 
 import jakarta.persistence.*;
 
-// Apģērba kategorija
+/** Apģērba kategorija. */
 @Entity
 @Table(name = "category")
 public class Category {

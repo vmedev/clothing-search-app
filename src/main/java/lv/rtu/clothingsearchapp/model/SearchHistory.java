@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-// Viens meklēšanas vēstures ieraksts (tabula SearchHistory)
+/** Viens meklēšanas vēstures ieraksts (tabula SearchHistory). */
 @Entity
 @Table(name = "search_history")
 public class SearchHistory {
@@ -20,12 +20,12 @@ public class SearchHistory {
     @Column(name = "query_text")
     private String queryText;
 
-    // Kategorija, ko atpazina MI vai lietotājs
+    /** Kategorija, ko atpazina MI vai lietotājs. */
     private String category;
 
     private String color;
 
-    // Augšupielādētas bildes ceļš
+    /** Augšupielādētas bildes ceļš. */
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 

@@ -2,7 +2,7 @@ package lv.rtu.clothingsearchapp.model;
 
 import jakarta.persistence.*;
 
-// Veikals, kurā pārdod preci (tabula Store)
+/** Veikals, kurā pārdod preci (tabula Store). */
 @Entity
 @Table(name = "store")
 public class Store {
@@ -14,7 +14,7 @@ public class Store {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-    // Veikala mājaslapa
+    /** Veikala mājaslapa. */
     @Column(name = "website_url")
     private String websiteUrl;
 

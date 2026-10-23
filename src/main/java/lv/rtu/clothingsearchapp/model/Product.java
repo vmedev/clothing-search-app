@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-/** Apģērbs no kataloga (tabula PRODUCT, dati no data.sql):
-    ID, IMAGE_NAME, COLOR, BRAND, PRICE, IMAGE_URL, DESCRIPTION
-    Kategorija un veikals var būt tukši, jo data.sql tos pagaidām neaizpilda
+/**
+ * Apģērbs no kataloga (tabula PRODUCT, dati no data.sql):
+ * ID, IMAGE_NAME, COLOR, BRAND, PRICE, IMAGE_URL, DESCRIPTION.
+ * Kategorija un veikals var būt tukši, jo data.sql tos pagaidām neaizpilda.
  */
 @Entity
 @Table(name = "product")
