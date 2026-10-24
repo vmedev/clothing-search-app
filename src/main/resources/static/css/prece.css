@@ -1,0 +1,51 @@
+/* Preces kartīte (11. punkts). Krāsas ņemtas no kopīgā style.css. */
+.atpakal { display: inline-block; margin-bottom: 16px; color: #9f7553; text-decoration: none; }
+.atpakal:hover { color: #583e2a; }
+
+.preces-karte {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    background-color: #edddc8;
+    border: 1px solid #bdae9c;
+    border-radius: 14px;
+    padding: 24px;
+}
+.preces-attels img {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #f1e5d6;
+    display: block;
+}
+.preces-info { min-width: 0; }
+.preces-nosaukums::first-letter { text-transform: uppercase; }
+.cena { font-size: 28px; font-weight: bold; color: #9f7553; margin-bottom: 18px; }
+.preces-dati { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; margin-bottom: 24px; }
+.preces-dati dt { color: #6c594b; }
+.preces-dati dd { margin: 0; }
+.darbibas { display: flex; flex-wrap: wrap; gap: 10px; }
+.darbibas form { margin: 0; }
+
+.poga-sekundara, .poga.poga-sekundara {
+    background-color: #f1e5d6;
+    color: #5e4a3d;
+    border: 1px solid #bdae9c;
+}
+.poga-sekundara:hover, .poga.poga-sekundara:hover { background-color: #e0ceaf; color: #583e2a; }
+
+.lietotajs { font-size: 15px; color: #5e4a3d; }
+.viesis-zime { font-size: 13px; background-color: #f1e5d6; border: 1px solid #bdae9c; border-radius: 99px; padding: 2px 10px; }
+.iziet-forma { margin: 0; }
+.iziet-forma button { padding: 9px 18px; }
+
+.zinojums { padding: 10px 14px; border-radius: 8px; }
+.zinojums-kluda { background-color: #f1d6cc; color: #7a3424; }
+.zinojums-ok    { background-color: #dfe5cf; color: #445229; }
+.zinojums-info  { background-color: #f1e5d6; color: #5e4a3d; border: 1px solid #bdae9c; }
+
+@media (max-width: 768px) {
+    .preces-karte { grid-template-columns: 1fr; gap: 20px; }
+}
