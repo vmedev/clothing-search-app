@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/register", "/guest",
+                .excludePathPatterns("/login", "/register", "/guest", "/test/**",
                         "/style.css", "/css/**", "/img/**", "/js/**", "/uploads/**", "/favicon.ico", "/error", "/h2-console/**");
 
         // Viesim nav vēstures, izlases un profila
