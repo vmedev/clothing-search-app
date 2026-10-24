@@ -103,6 +103,7 @@ public class AiVisionService {
                 {"category": viena no %s,
                  "color": viena no %s,
                  "style": īss apraksts latviešu valodā 1-3 vārdos}
+                 Ja precīzas vērtības sarakstā nav, izvēlies tuvāko no saraksta, nevis null.
                 Ja attēlā nav apģērba, atgriez {"category": null, "color": null, "style": null}.
                 """.formatted(categories, colors);
     }
