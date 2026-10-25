@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search history | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero history-hero">
+        <p class="eyebrow">YOUR PERSONAL ARCHIVE</p>
+        <h1>Your search<br><span>journey.</span></h1>
+        <p class="hero-description">
+            Revisit your previous searches, change your filters,
+            or run a search again.
+        </p>
+    </section>
+
+    <section class="results-section">
+        <div class="results-heading">
+            <div>
+                <p class="eyebrow">SAVED SEARCHES</p>
+                <h2>Search history</h2>
+            </div>
+            <a th:href="@{/search}" class="secondary-button">
+                New search
+            </a>
+        </div>
+
+        <p class="success-message"
+           th:if="${successMessage != null}"
+           th:text="${successMessage}"></p>
+
+        <div class="history-list" th:if="${!historyItems.isEmpty()}">
+            <article class="history-card" th:each="item : ${historyItems}">
+                <div class="history-date">
+                    <span class="history-dot"></span>
+                    <span th:text="${item.displayDate}">Date</span>
+                </div>
+
+                <div class="history-details">
+                    <h3>Search filters</h3>
+
+                    <div class="history-tags">
+                        <span class="history-tag"
+                              th:text="${item.category == null ? 'Any category' : item.category}">
+                            Category
+                        </span>
+                        <span class="history-tag"
+                              th:text="${item.color == null ? 'Any colour' : item.color}">
+                            Colour
+                        </span>
+                        <span class="history-tag"
+                              th:text="${item.brand == null ? 'Any brand' : item.brand}">
+                            Brand
+                        </span>
+                    </div>
+
+                    <p class="history-price">
+                        Price range:
+                        <strong th:text="${(item.minPrice == null ? '€0.00' : '€' + #numbers.formatDecimal(item.minPrice, 1, 2)) + ' – ' + (item.maxPrice == null ? 'No maximum' : '€' + #numbers.formatDecimal(item.maxPrice, 1, 2))}">
+                            €0.00 – No maximum
+                        </strong>
+                    </p>
+                </div>
+
+                <div class="history-actions">
+                    <a th:href="@{/history/{id}/repeat(id=${item.id})}"
+                       class="primary-button small-button">
+                        Repeat search
+                    </a>
+
+                    <a th:href="@{/history/{id}/edit(id=${item.id})}"
+                       class="secondary-button small-button">
+                        Edit
+                    </a>
+
+                    <form th:action="@{/history/{id}/delete(id=${item.id})}"
+                          method="post"
+                          onsubmit="return confirm('Delete this search from history?');">
+                        <button type="submit" class="delete-button">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </article>
+        </div>
+
+        <div class="empty-state" th:if="${historyItems.isEmpty()}">
+            <h3>Your history is empty</h3>
+            <p>Search for clothing and your searches will appear here.</p>
+            <a th:href="@{/search}" class="primary-button">
+                Start searching
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER — Find your own style.</p>
+</footer>
+
+</body>
+</html>
