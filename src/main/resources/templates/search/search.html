@@ -35,7 +35,7 @@
            th:if="${errorMessage != null}"
            th:text="${errorMessage}"></p>
 
-        <form th:action="@{/search}" th:object="${filters}"
+        <form th:action="@{/templates/search}" th:object="${filters}"
               method="post" class="filter-form">
 
             <div class="field">
@@ -128,7 +128,7 @@
         <div class="empty-state" th:if="${items.isEmpty()}">
             <h3>No clothes found</h3>
             <p>Try changing your filters to discover more items.</p>
-            <a th:href="@{/search}" class="secondary-button">
+            <a th:href="@{/templates/search}" class="secondary-button">
                 Clear filters
             </a>
         </div>
