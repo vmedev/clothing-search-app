@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find your style | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero">
+        <p class="eyebrow">YOUR STYLE, YOUR RULES</p>
+        <h1>Find your next<br><span>favourite piece.</span></h1>
+        <p class="hero-description">
+            Discover clothing that matches your style.
+            Filter by category, colour, brand and price.
+        </p>
+    </section>
+
+    <section class="filter-panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">REFINE YOUR SEARCH</p>
+                <h2>Find the right fit</h2>
+            </div>
+        </div>
+
+        <p class="error-message"
+           th:if="${errorMessage != null}"
+           th:text="${errorMessage}"></p>
+
+        <form th:action="@{/search}" th:object="${filters}"
+              method="post" class="filter-form">
+
+            <div class="field">
+                <label for="category">Category</label>
+                <select id="category" th:field="*{category}">
+                    <option value="">All categories</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category}"
+                            th:text="${category}"></option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="color">Colour</label>
+                <select id="color" th:field="*{color}">
+                    <option value="">All colours</option>
+                    <option th:each="color : ${colors}"
+                            th:value="${color}"
+                            th:text="${color}"></option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="brand">Brand</label>
+                <select id="brand" th:field="*{brand}">
+                    <option value="">All brands</option>
+                    <option th:each="brand : ${brands}"
+                            th:value="${brand}"
+                            th:text="${brand}"></option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="minPrice">Min price (€)</label>
+                <input id="minPrice" type="number" step="0.01"
+                       min="0" th:field="*{minPrice}"
+                       placeholder="0.00">
+            </div>
+
+            <div class="field">
+                <label for="maxPrice">Max price (€)</label>
+                <input id="maxPrice" type="number" step="0.01"
+                       min="0" th:field="*{maxPrice}"
+                       placeholder="Any">
+            </div>
+
+            <button type="submit" class="primary-button">
+                Search clothes
+            </button>
+        </form>
+    </section>
+
+    <section class="results-section">
+        <div class="results-heading">
+            <div>
+                <p class="eyebrow">CURATED FOR YOU</p>
+                <h2>Clothing collection</h2>
+            </div>
+            <span class="result-count"
+                  th:text="${#lists.size(items)} + ' items found'">
+                0 items found
+            </span>
+        </div>
+
+        <div class="product-grid" th:if="${!items.isEmpty()}">
+            <article class="product-card" th:each="item : ${items}">
+                <div class="product-image">
+                    <img th:src="${item.imageUrl}"
+                         th:alt="${item.name}"
+                         onerror="this.onerror=null;this.src='https://placehold.co/600x750/f2eee8/333333?text=Clothing';">
+                    <span class="product-category"
+                          th:text="${item.category}">Category</span>
+                </div>
+
+                <div class="product-info">
+                    <p class="product-brand" th:text="${item.brand}">
+                        Brand
+                    </p>
+                    <h3 th:text="${item.name}">Clothing name</h3>
+                    <div class="product-meta">
+                        <span th:text="${item.color}">Colour</span>
+                        <strong th:text="'€' + ${#numbers.formatDecimal(item.price, 1, 2)}">
+                            €0.00
+                        </strong>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="empty-state" th:if="${items.isEmpty()}">
+            <h3>No clothes found</h3>
+            <p>Try changing your filters to discover more items.</p>
+            <a th:href="@{/search}" class="secondary-button">
+                Clear filters
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER — Find your own style.</p>
+</footer>
+
+</body>
+</html>
