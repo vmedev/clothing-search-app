@@ -1,110 +1,99 @@
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search history | THREADFINDER</title>
+    <title>Meklēšanas vēsture | THREADFINDER</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <div class="site-header">
-    <nav th:replace="~{fragments :: navbar}"></nav>
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
 </div>
 
 <main class="container">
     <section class="hero history-hero">
-        <p class="eyebrow">YOUR PERSONAL ARCHIVE</p>
-        <h1>Your search<br><span>journey.</span></h1>
+        <p class="eyebrow">TAVS PERSONĪGAIS ARHĪVS</p>
+        <h1>Tavi iepriekšējie<br><span>meklējumi.</span></h1>
         <p class="hero-description">
-            Revisit your previous searches, change your filters,
-            or run a search again.
+            Atkārto iepriekšējos meklējumus, labo filtrus vai dzēs liekos ierakstus.
         </p>
     </section>
 
     <section class="results-section">
         <div class="results-heading">
             <div>
-                <p class="eyebrow">SAVED SEARCHES</p>
-                <h2>Search history</h2>
+                <p class="eyebrow">SAGLABĀTIE MEKLĒJUMI</p>
+                <h2>Meklēšanas vēsture</h2>
             </div>
-            <a th:href="@{/search}" class="secondary-button">
-                New search
-            </a>
+            <a th:href="@{/search}" class="secondary-button">Jauna meklēšana</a>
         </div>
 
-        <p class="success-message"
-           th:if="${successMessage != null}"
-           th:text="${successMessage}"></p>
+        <p class="success-message" th:if="${successMessage != null}" th:text="${successMessage}"></p>
+        <p class="error-message" th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
 
-        <div class="history-list" th:if="${!historyItems.isEmpty()}">
+        <div class="empty-state" th:if="${isGuest}">
+            <h3>Vēsture pieejama tikai reģistrētiem lietotājiem</h3>
+            <p>Viesa režīmā meklējumi netiek saglabāti.</p>
+            <a th:href="@{/login}" class="primary-button">Pieteikties</a>
+        </div>
+
+        <div class="history-list" th:if="${!isGuest and !historyItems.isEmpty()}">
             <article class="history-card" th:each="item : ${historyItems}">
                 <div class="history-date">
                     <span class="history-dot"></span>
-                    <span th:text="${item.displayDate}">Date</span>
+                    <span th:text="${#temporals.format(item.createdAt, 'dd.MM.yyyy HH:mm')}">Datums</span>
                 </div>
 
+                <img class="history-image" th:if="${item.imageUrl != null}"
+                     th:src="@{${item.imageUrl}}" alt="Augšupielādētais attēls">
+
                 <div class="history-details">
-                    <h3>Search filters</h3>
+                    <h3 th:text="${item.queryText != null ? item.queryText : 'Meklēšana'}">Meklēšana</h3>
 
                     <div class="history-tags">
                         <span class="history-tag"
-                              th:text="${item.category == null ? 'Any category' : item.category}">
-                            Category
-                        </span>
+                              th:text="${item.category == null ? 'Jebkura kategorija' : item.category}">Kategorija</span>
                         <span class="history-tag"
-                              th:text="${item.color == null ? 'Any colour' : item.color}">
-                            Colour
-                        </span>
+                              th:text="${item.color == null ? 'Jebkura krāsa' : item.color}">Krāsa</span>
                         <span class="history-tag"
-                              th:text="${item.brand == null ? 'Any brand' : item.brand}">
-                            Brand
-                        </span>
+                              th:text="${item.brand == null ? 'Jebkurš zīmols' : item.brand}">Zīmols</span>
                     </div>
 
                     <p class="history-price">
-                        Price range:
-                        <strong th:text="${(item.minPrice == null ? '€0.00' : '€' + #numbers.formatDecimal(item.minPrice, 1, 2)) + ' – ' + (item.maxPrice == null ? 'No maximum' : '€' + #numbers.formatDecimal(item.maxPrice, 1, 2))}">
-                            €0.00 – No maximum
+                        Cena:
+                        <strong th:text="${(item.minPrice == null ? '0.00 €' : #numbers.formatDecimal(item.minPrice, 1, 2) + ' €') + ' – ' + (item.maxPrice == null ? 'bez ierobežojuma' : #numbers.formatDecimal(item.maxPrice, 1, 2) + ' €')}">
+                            0.00 € – bez ierobežojuma
                         </strong>
                     </p>
                 </div>
 
                 <div class="history-actions">
                     <a th:href="@{/history/{id}/repeat(id=${item.id})}"
-                       class="primary-button small-button">
-                        Repeat search
-                    </a>
+                       class="primary-button small-button">Atkārtot</a>
 
                     <a th:href="@{/history/{id}/edit(id=${item.id})}"
-                       class="secondary-button small-button">
-                        Edit
-                    </a>
+                       class="secondary-button small-button">Labot</a>
 
-                    <form th:action="@{/history/{id}/delete(id=${item.id})}"
-                          method="post"
-                          onsubmit="return confirm('Delete this search from history?');">
-                        <button type="submit" class="delete-button">
-                            Delete
-                        </button>
+                    <form th:action="@{/history/{id}/delete(id=${item.id})}" method="post"
+                          onsubmit="return confirm('Dzēst šo ierakstu no vēstures?');">
+                        <button type="submit" class="delete-button">Dzēst</button>
                     </form>
                 </div>
             </article>
         </div>
 
-        <div class="empty-state" th:if="${historyItems.isEmpty()}">
-            <h3>Your history is empty</h3>
-            <p>Search for clothing and your searches will appear here.</p>
-            <a th:href="@{/search}" class="primary-button">
-                Start searching
-            </a>
+        <div class="empty-state" th:if="${!isGuest and historyItems.isEmpty()}">
+            <h3>Vēsture ir tukša</h3>
+            <p>Meklē apģērbu, un tavi meklējumi parādīsies šeit.</p>
+            <a th:href="@{/search}" class="primary-button">Sākt meklēt</a>
         </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>THREADFINDER — Find your own style.</p>
+    <p>THREADFINDER. Atrodi savu stilu.</p>
 </footer>
 
 </body>

@@ -23,6 +23,7 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Nosūta attēlu uz Gemini API un atgriež atpazīto apģērba kategoriju un krāsu.
  * Atļautās vērtības tiek ņemtas no datubāzes.
+ * Ja modelis ir pārslogots, tiek mēģināts nākamais no saraksta gemini.models.
  */
 @Service
 public class AiVisionService {
@@ -32,16 +33,16 @@ public class AiVisionService {
     private final RestClient restClient;
     private final ObjectMapper mapper = JsonMapper.builder().build();
     private final String apiKey;
-    private final String model;
+    private final List<String> models;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
 
     public AiVisionService(@Value("${gemini.api-key:}") String apiKey,
-                           @Value("${gemini.model}") String model,
+                           @Value("${gemini.models}") List<String> models,
                            CategoryRepository categoryRepository,
                            ProductRepository productRepository) {
         this.apiKey = apiKey;
-        this.model = model;
+        this.models = models;
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.restClient = RestClient.builder()
@@ -50,7 +51,7 @@ public class AiVisionService {
     }
 
     /**
-     * Atgriež atpazīto apģērbu vai Optional.empty(), ja API nav pieejams
+     * Atgriež atpazīto apģērbu vai Optional.empty(), ja neviens modelis nav pieejams
      * vai atbilde nav derīga (tad lietotājam jārāda manuālā izvēle).
      */
     public Optional<DetectedClothing> analyze(MultipartFile image) {
@@ -73,15 +74,23 @@ public class AiVisionService {
                     "generationConfig", Map.of("response_mime_type", "application/json")
             );
 
-            String response = restClient.post()
-                    .uri("/models/{model}:generateContent", model)
-                    .header("x-goog-api-key", apiKey)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(body)
-                    .retrieve()
-                    .body(String.class);
-
-            return parse(response, categories, colors);
+            for (String model : models) {
+                try {
+                    String response = restClient.post()
+                            .uri("/models/{model}:generateContent", model.trim())
+                            .header("x-goog-api-key", apiKey)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(body)
+                            .retrieve()
+                            .body(String.class);
+                    log.info("Gemini modelis: {}", model);
+                    return parse(response, categories, colors);
+                } catch (Exception e) {
+                    log.warn("Modelis {} nav pieejams: {}", model, e.getMessage());
+                }
+            }
+            log.error("Neviens Gemini modelis nav pieejams");
+            return Optional.empty();
         } catch (Exception e) {
             log.error("Gemini kļūda: {}", e.getMessage());
             return Optional.empty();
@@ -103,7 +112,7 @@ public class AiVisionService {
                 {"category": viena no %s,
                  "color": viena no %s,
                  "style": īss apraksts latviešu valodā 1-3 vārdos}
-                 Ja precīzas vērtības sarakstā nav, izvēlies tuvāko no saraksta, nevis null.
+                Ja precīzas vērtības sarakstā nav, izvēlies tuvāko no saraksta, nevis null.
                 Ja attēlā nav apģērba, atgriez {"category": null, "color": null, "style": null}.
                 """.formatted(categories, colors);
     }
@@ -118,14 +127,14 @@ public class AiVisionService {
         String category = json.path("category").asString(null);
         String color = json.path("color").asString(null);
         String style = json.path("style").asString("");
-        log.info("Gemini atbilde: {} | kategorijas DB: {} | krāsas DB: {}", text, categories, colors);
+        log.info("Gemini atbilde: {}", text);
+
         if (!categories.contains(category)) {
             return Optional.empty();
         }
         if (!colors.contains(color)) {
             color = null;
         }
-
         return Optional.of(new DetectedClothing(category, color, style));
     }
 }

@@ -3,81 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${product.description} + ' | Apģērbu meklētājs'">Prece | Apģērbu meklētājs</title>
+    <title th:text="${product.description} + ' | THREADFINDER'">Prece | THREADFINDER</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/prece.css}">
 </head>
 <body>
 
-<!-- Galvene tāda pati kā base.html (6. punkts). Kad base.html būs Thymeleaf, to var aizstāt ar fragmentu. -->
-<header class="galvene">
-    <div class="konteiners galvenes-saturs">
-        <a th:href="@{/}" class="logotips">Apģērbu meklētājs</a>
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
+</div>
 
-        <nav class="izvelne">
-            <a th:href="@{/}">Sākums</a>
-            <a th:href="@{/search}">Meklēt apģērbu</a>
-            <a th:href="@{/favorites}">Izlase</a>
-            <a th:href="@{/history}">Meklēšanas vēsture</a>
-            <span th:if="${currentUser != null}" class="lietotajs" th:text="${currentUser.username}">lietotājs</span>
-            <span th:if="${currentUser == null}" class="viesis-zime">Viesis</span>
-            <a th:if="${currentUser == null}" th:href="@{/login}" class="pieteiksanas">Pieteikties</a>
-            <form th:if="${currentUser != null}" th:action="@{/logout}" method="post" class="iziet-forma">
-                <button type="submit" class="pieteiksanas">Iziet</button>
-            </form>
-        </nav>
+<main class="container">
+    <a href="javascript:history.back()" class="back-link">← Atpakaļ</a>
+
+    <div class="messages">
+        <p th:if="${error}" class="error-message" th:text="${error}"></p>
+        <p th:if="${success}" class="success-message" th:text="${success}"></p>
+        <p th:if="${info}" class="info-message" th:text="${info}"></p>
     </div>
-</header>
 
-<main class="konteiners galvenais-saturs">
-    <a href="javascript:history.back()" class="atpakal">← Atpakaļ</a>
-
-    <p th:if="${error}" class="zinojums zinojums-kluda" th:text="${error}"></p>
-    <p th:if="${success}" class="zinojums zinojums-ok" th:text="${success}"></p>
-    <p th:if="${info}" class="zinojums zinojums-info" th:text="${info}"></p>
-
-    <article class="preces-karte">
-        <div class="preces-attels">
+    <article class="product-detail">
+        <div class="product-detail-image">
             <img th:src="@{/img/{f}(f=${product.imageName})}" th:alt="${product.description}">
         </div>
 
-        <div class="preces-info">
-            <h1 class="preces-nosaukums" th:text="${product.description}">sporta jaka</h1>
-            <p class="cena" th:text="${#numbers.formatDecimal(product.price, 1, 2, 'COMMA')} + ' €'">55,95 €</p>
+        <div class="product-detail-info">
+            <p class="eyebrow" th:if="${product.category != null}"
+               th:text="${product.category.name}">Kategorija</p>
+            <h1 th:text="${product.description}">sporta jaka</h1>
+            <p class="product-detail-price"
+               th:text="${#numbers.formatDecimal(product.price, 1, 2)} + ' €'">55.95 €</p>
 
-            <dl class="preces-dati">
+            <dl class="product-detail-data">
                 <dt>Zīmols</dt>
                 <dd th:text="${product.brand} ?: '—'">adidas</dd>
                 <dt>Krāsa</dt>
-                <dd th:text="${product.color} ?: '—'">melns</dd>
+                <dd th:text="${product.color} ?: '—'">melna</dd>
                 <dt>Veikals</dt>
                 <dd th:text="${storeName}">Zalando</dd>
             </dl>
 
-            <div class="darbibas">
-                <form th:if="${currentUser != null and !inFavorites}"
+            <div class="product-actions">
+                <form th:if="${!inFavorites}"
                       th:action="@{/product/{id}/favorite(id=${product.id})}" method="post">
-                    <button type="submit">♡ Pievienot izlasei</button>
+                    <button type="submit" class="primary-button">♡ Pievienot izlasei</button>
                 </form>
-                <form th:if="${currentUser != null and inFavorites}"
+                <form th:if="${inFavorites}"
                       th:action="@{/product/{id}/favorite/remove(id=${product.id})}" method="post">
-                    <button type="submit" class="poga-sekundara">♥ Izlasē · Noņemt</button>
-                </form>
-                <!-- Viesim: pieprasījums aiziet uz serveri, kontrolieris parāda "jāautorizējas" -->
-                <form th:if="${currentUser == null}"
-                      th:action="@{/product/{id}/favorite(id=${product.id})}" method="post">
-                    <button type="submit">♡ Pievienot izlasei</button>
+                    <button type="submit" class="secondary-button">♥ Izlasē · Noņemt</button>
                 </form>
 
-                <a th:href="@{/product/{id}/store(id=${product.id})}" class="poga poga-sekundara"
+                <a th:href="@{/product/{id}/store(id=${product.id})}" class="secondary-button"
                    target="_blank" rel="noopener">Pāriet uz veikalu ↗</a>
             </div>
         </div>
     </article>
 </main>
 
-<footer class="kajene">
-    <p>© 2026 Sieriņi | Apģērbu meklētājs</p>
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
 </footer>
 
 </body>

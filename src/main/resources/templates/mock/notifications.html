@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paziņojumi | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero history-hero">
+        <p class="eyebrow">CENU IZMAIŅAS</p>
+        <h1>Tavi<br><span>paziņojumi.</span></h1>
+        <p class="hero-description">Paziņojumi par izlasē saglabāto preču cenu samazinājumu un pieejamību.</p>
+    </section>
+
+    <section class="results-section">
+        <p class="info-message mock-note">Prototips: paziņojumi ir iekodēti un parāda, kā funkcija izskatīsies.</p>
+
+        <div class="history-list">
+            <article class="history-card">
+                <div class="history-date"><span class="history-dot"></span><span>Šodien, 09:12</span></div>
+                <div class="history-details">
+                    <h3>Cena samazinājusies: vīriešu ādas jaka</h3>
+                    <div class="history-tags">
+                        <span class="history-tag">Zara</span>
+                        <span class="history-tag">79.95 € → 59.95 €</span>
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <a th:href="@{/product/21}" class="primary-button small-button">Skatīt preci</a>
+                </div>
+            </article>
+
+            <article class="history-card">
+                <div class="history-date"><span class="history-dot"></span><span>Vakar, 18:40</span></div>
+                <div class="history-details">
+                    <h3>Cena samazinājusies: sieviešu ziemas jaka</h3>
+                    <div class="history-tags">
+                        <span class="history-tag">Noisy May</span>
+                        <span class="history-tag">48.93 € → 39.90 €</span>
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <a th:href="@{/product/34}" class="primary-button small-button">Skatīt preci</a>
+                </div>
+            </article>
+
+            <article class="history-card">
+                <div class="history-date"><span class="history-dot"></span><span>24.10.2026</span></div>
+                <div class="history-details">
+                    <h3>Prece vairs nav pieejama: svītrains polo džemperis</h3>
+                    <div class="history-tags">
+                        <span class="history-tag">Zara</span>
+                        <span class="history-tag">Izpārdots</span>
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <a th:href="@{/product/19}" class="secondary-button small-button">Skatīt preci</a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
+</footer>
+
+</body>
+</html>

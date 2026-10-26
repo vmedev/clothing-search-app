@@ -1,17 +1,31 @@
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
 <body>
 
 <nav th:fragment="navbar" class="navbar">
-    <a class="brand" th:href="@{/templates/search}">
-        THREADFINDER
-    </a>
+    <a class="brand" th:href="@{/search}">THREADFINDER</a>
 
     <div class="nav-links">
-        <a th:href="@{/templates/search}">Search clothes</a>
-        <a th:href="@{/templates/history}">Search history</a>
+        <a th:href="@{/search}">Meklēt apģērbu</a>
+        <a th:href="@{/upload}">Meklēt pēc attēla</a>
+        <a th:href="@{/history}">Meklēšanas vēsture</a>
+        <a th:href="@{/favorites}">Izlase</a>
+
+        <a th:href="@{/notifications}">Paziņojumi</a>
+        <a th:if="${currentUser != null}" th:href="@{/profile}" class="nav-user"
+           th:text="${currentUser.username}">lietotājs</a>
+        <span th:if="${currentUser == null}" class="guest-badge">Viesis</span>
+
+        <a th:if="${currentUser == null}" th:href="@{/login}"
+           class="primary-button small-button">Pieteikties</a>
+        <form th:if="${currentUser != null}" th:action="@{/logout}" method="post">
+            <button type="submit" class="secondary-button small-button">Iziet</button>
+        </form>
     </div>
+</nav>
+
+<nav th:fragment="navbar-simple" class="navbar">
+    <a class="brand" th:href="@{/login}">THREADFINDER</a>
 </nav>
 
 </body>

@@ -2,6 +2,7 @@ package lv.rtu.clothingsearchapp.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /** Viens meklēšanas vēstures ieraksts (tabula SearchHistory). */
@@ -25,6 +26,14 @@ public class SearchHistory {
 
     private String color;
 
+    private String brand;
+
+    @Column(name = "min_price", precision = 10, scale = 2)
+    private BigDecimal minPrice;
+
+    @Column(name = "max_price", precision = 10, scale = 2)
+    private BigDecimal maxPrice;
+
     /** Augšupielādētas bildes ceļš. */
     @Column(name = "image_url", length = 500)
     private String imageUrl;
@@ -44,6 +53,12 @@ public class SearchHistory {
     public void setCategory(String category) { this.category = category; }
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
+    public String getBrand() { return brand; }
+    public void setBrand(String brand) { this.brand = brand; }
+    public BigDecimal getMinPrice() { return minPrice; }
+    public void setMinPrice(BigDecimal minPrice) { this.minPrice = minPrice; }
+    public BigDecimal getMaxPrice() { return maxPrice; }
+    public void setMaxPrice(BigDecimal maxPrice) { this.maxPrice = maxPrice; }
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public LocalDateTime getCreatedAt() { return createdAt; }

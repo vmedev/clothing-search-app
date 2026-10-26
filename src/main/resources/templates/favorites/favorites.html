@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izlase | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero history-hero">
+        <p class="eyebrow">TEV PATĪK</p>
+        <h1>Tava<br><span>izlase.</span></h1>
+        <p class="hero-description">Preces, kuras saglabāji vēlākai apskatei.</p>
+    </section>
+
+    <section class="results-section">
+        <div class="results-heading">
+            <div>
+                <p class="eyebrow">SAGLABĀTĀS PRECES</p>
+                <h2>Izlase</h2>
+            </div>
+            <span class="result-count" th:if="${!isGuest}"
+                  th:text="'Preces: ' + ${#lists.size(favorites)}">Preces: 0</span>
+        </div>
+
+        <p class="success-message" th:if="${successMessage != null}" th:text="${successMessage}"></p>
+
+        <div class="empty-state" th:if="${isGuest}">
+            <h3>Izlase pieejama tikai reģistrētiem lietotājiem</h3>
+            <p>Viesa režīmā preces nevar saglabāt.</p>
+            <a th:href="@{/login}" class="primary-button">Pieteikties</a>
+        </div>
+
+        <div class="product-grid" th:if="${!isGuest and !favorites.isEmpty()}">
+            <article class="product-card" th:each="fav : ${favorites}" th:with="item=${fav.product}">
+                <a th:href="@{/product/{id}(id=${item.id})}">
+                    <div class="product-image">
+                        <img th:src="@{/img/{f}(f=${item.imageName})}" th:alt="${item.description}">
+                        <span class="product-category" th:if="${item.category != null}"
+                              th:text="${item.category.name}">Kategorija</span>
+                    </div>
+                </a>
+
+                <div class="product-info">
+                    <p class="product-brand" th:text="${item.brand}">Zīmols</p>
+                    <h3 th:text="${item.description}">Apraksts</h3>
+                    <div class="product-meta">
+                        <span th:text="${item.color}">Krāsa</span>
+                        <strong th:text="${#numbers.formatDecimal(item.price, 1, 2)} + ' €'">0.00 €</strong>
+                    </div>
+                    <form th:action="@{/favorites/{id}/remove(id=${item.id})}" method="post"
+                          class="favorite-remove">
+                        <button type="submit" class="delete-button small-button">Noņemt</button>
+                    </form>
+                </div>
+            </article>
+        </div>
+
+        <div class="empty-state" th:if="${!isGuest and favorites.isEmpty()}">
+            <h3>Izlase ir tukša</h3>
+            <p>Atver preces kartīti un spied "Pievienot izlasei".</p>
+            <a th:href="@{/search}" class="primary-button">Meklēt apģērbu</a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
+</footer>
+
+</body>
+</html>

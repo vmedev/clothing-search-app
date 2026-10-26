@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrators | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero history-hero">
+        <p class="eyebrow">ADMINISTRATORS</p>
+        <h1>Preču<br><span>pārvaldība.</span></h1>
+        <p class="hero-description">Preču, veikalu, kategoriju un lietotāju pārvaldība.</p>
+    </section>
+
+    <section class="results-section">
+        <p class="info-message mock-note">Prototips: pievienošana, labošana un dzēšana nav aktīva.</p>
+
+        <div class="admin-tabs">
+            <span class="history-tag">Preces</span>
+            <span class="admin-tab-muted">Veikali</span>
+            <span class="admin-tab-muted">Kategorijas</span>
+            <span class="admin-tab-muted">Lietotāji</span>
+            <button type="button" class="primary-button small-button" disabled>+ Pievienot preci</button>
+        </div>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>ID</th><th>Apraksts</th><th>Kategorija</th><th>Zīmols</th>
+                    <th>Krāsa</th><th>Cena</th><th>Veikals</th><th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <td th:text="${p.id}">1</td>
+                    <td th:text="${p.description}">sporta jaka</td>
+                    <td th:text="${p.category != null} ? ${p.category.name} : '—'">Jakas</td>
+                    <td th:text="${p.brand}">adidas</td>
+                    <td th:text="${p.color}">sarkana</td>
+                    <td th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' €'">55.95 €</td>
+                    <td th:text="${p.store != null} ? ${p.store.name} : '—'">Zalando</td>
+                    <td class="admin-actions">
+                        <button type="button" class="secondary-button small-button" disabled>Labot</button>
+                        <button type="button" class="delete-button small-button" disabled>Dzēst</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
+</footer>
+
+</body>
+</html>

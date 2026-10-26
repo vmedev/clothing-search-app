@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meklēt pēc attēla | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero">
+        <p class="eyebrow">REDZĒJI, PATIKA, ATRADI</p>
+        <h1>Meklē pēc<br><span>attēla.</span></h1>
+        <p class="hero-description">
+            Augšupielādē apģērba fotogrāfiju, un mēs atradīsim līdzīgas preces dažādos veikalos.
+        </p>
+    </section>
+
+    <section class="filter-panel">
+        <p class="error-message" th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
+        <p class="info-message" th:if="${infoMessage != null}" th:text="${infoMessage}"></p>
+
+        <div class="upload-layout">
+            <form th:action="@{/upload}" method="post" enctype="multipart/form-data" class="upload-form">
+                <label for="image" class="dropzone">
+                    <img id="preview" class="upload-preview" alt=""
+                         th:src="${imageUrl != null} ? @{${imageUrl}} : ''"
+                         th:classappend="${imageUrl == null} ? 'hidden'">
+                    <span id="dropzone-text" th:classappend="${imageUrl != null} ? 'hidden'">
+                        Noklikšķini, lai izvēlētos attēlu<br>
+                        <small>JPG, PNG vai WEBP, līdz 5 MB</small>
+                    </span>
+                </label>
+                <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp"
+                       class="hidden" required>
+                <button type="submit" class="primary-button">Meklēt līdzīgus</button>
+            </form>
+
+            <div class="upload-result" th:if="${detected != null}">
+                <p class="eyebrow">ATPAZĪTS</p>
+                <h2 th:text="${detected.style != null and !detected.style.isBlank()} ? ${detected.style} : ${detected.category}">ādas jaka</h2>
+                <div class="history-tags">
+                    <span class="history-tag" th:text="${detected.category}">Jakas</span>
+                    <span class="history-tag" th:if="${detected.color != null}" th:text="${detected.color}">melna</span>
+                </div>
+                <p class="history-price" th:if="${savedToHistory}">✓ Meklējums saglabāts vēsturē</p>
+                <p class="history-price" th:if="${!savedToHistory}">Viesa režīmā meklējums netiek saglabāts</p>
+            </div>
+
+            <form th:if="${manual}" th:action="@{/upload/manual}" method="post" class="filter-form upload-manual">
+                <input type="hidden" name="imageUrl" th:value="${imageUrl}">
+                <div class="field">
+                    <label for="category">Kategorija</label>
+                    <select id="category" name="category" required>
+                        <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="color">Krāsa</label>
+                    <select id="color" name="color">
+                        <option value="">Jebkura krāsa</option>
+                        <option th:each="c : ${colors}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="primary-button">Meklēt</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="results-section" th:if="${products != null}">
+        <div class="results-heading">
+            <div>
+                <p class="eyebrow">LĪDZĪGĀKĀS PRECES</p>
+                <h2>Rezultāti</h2>
+            </div>
+            <span class="result-count" th:text="'Atrastas preces: ' + ${#lists.size(products)}">0</span>
+        </div>
+
+        <div class="product-grid" th:if="${!products.isEmpty()}">
+            <article class="product-card" th:each="item : ${products}">
+                <a th:href="@{/product/{id}(id=${item.id})}">
+                    <div class="product-image">
+                        <img th:src="@{/img/{f}(f=${item.imageName})}" th:alt="${item.description}">
+                        <span class="product-category" th:if="${item.category != null}"
+                              th:text="${item.category.name}">Kategorija</span>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="product-brand" th:text="${item.brand}">Zīmols</p>
+                    <h3 th:text="${item.description}">Apraksts</h3>
+                    <div class="product-meta">
+                        <span th:text="${item.color}">Krāsa</span>
+                        <strong th:text="${#numbers.formatDecimal(item.price, 1, 2)} + ' €'">0.00 €</strong>
+                    </div>
+                    <p class="product-store" th:if="${item.store != null}" th:text="${item.store.name}">Veikals</p>
+                </div>
+            </article>
+        </div>
+
+        <div class="empty-state" th:if="${products.isEmpty()}">
+            <h3>Līdzīgas preces netika atrastas</h3>
+            <p>Pamēģini citu attēlu vai izmanto meklēšanu pēc filtriem.</p>
+            <a th:href="@{/search}" class="secondary-button">Meklēt pēc filtriem</a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
+</footer>
+
+<script>
+    // Parāda izvēlētā attēla priekšskatījumu pirms augšupielādes
+    document.getElementById('image').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const preview = document.getElementById('preview');
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('hidden');
+        document.getElementById('dropzone-text').classList.add('hidden');
+    });
+</script>
+
+</body>
+</html>

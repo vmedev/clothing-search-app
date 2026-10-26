@@ -3,49 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reģistrācija | Apģērbu meklētājs</title>
+    <title>Reģistrācija | THREADFINDER</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 <body>
 
-<header class="galvene">
-    <div class="konteiners galvenes-saturs">
-        <a th:href="@{/login}" class="logotips">Apģērbu meklētājs</a>
-    </div>
-</header>
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar-simple}"></nav>
+</div>
 
-<main class="konteiners galvenais-saturs">
-    <section class="auth-karte">
+<main class="container">
+    <section class="auth-card">
+        <p class="eyebrow">JAUNS KONTS</p>
         <h1>Reģistrācija</h1>
-        <p class="apaksteksts">Izveido kontu, lai saglabātu meklēšanas vēsturi un izlasi</p>
+        <p class="auth-subtitle">Izveido kontu, lai saglabātu meklēšanas vēsturi un izlasi</p>
 
-        <p th:if="${error}" class="zinojums zinojums-kluda" th:text="${error}"></p>
+        <p th:if="${error}" class="error-message" th:text="${error}"></p>
 
-        <form th:action="@{/register}" method="post" class="auth-forma">
-            <label for="username">Lietotājvārds</label>
-            <input id="username" name="username" type="text" th:value="${username}"
-                   required autocomplete="username">
+        <form th:action="@{/register}" method="post" class="auth-form">
+            <div class="field">
+                <label for="username">Lietotājvārds</label>
+                <input id="username" name="username" type="text" th:value="${username}"
+                       required autocomplete="username">
+            </div>
 
-            <label for="email">E-pasts</label>
-            <input id="email" name="email" type="email" th:value="${email}" required autocomplete="email">
+            <div class="field">
+                <label for="email">E-pasts</label>
+                <input id="email" name="email" type="email" th:value="${email}"
+                       required autocomplete="email">
+            </div>
 
-            <label for="password">Parole</label>
-            <input id="password" name="password" type="password" required minlength="8" autocomplete="new-password">
-            <small class="mazs">Vismaz 8 simboli, vismaz 1 cipars</small>
+            <div class="field">
+                <label for="password">Parole</label>
+                <input id="password" name="password" type="password"
+                       required minlength="8" autocomplete="new-password">
+                <small class="hint">Vismaz 8 simboli, vismaz 1 cipars</small>
+            </div>
 
-            <label for="passwordRepeat">Parole vēlreiz</label>
-            <input id="passwordRepeat" name="passwordRepeat" type="password" required autocomplete="new-password">
+            <div class="field">
+                <label for="passwordRepeat">Parole vēlreiz</label>
+                <input id="passwordRepeat" name="passwordRepeat" type="password"
+                       required autocomplete="new-password">
+            </div>
 
-            <button type="submit">Izveidot kontu</button>
+            <button type="submit" class="primary-button">Izveidot kontu</button>
         </form>
 
-        <p class="auth-saites">Jau ir konts? <a th:href="@{/login}">Pieteikties</a></p>
+        <p class="auth-links">Jau ir konts? <a th:href="@{/login}">Pieteikties</a></p>
     </section>
 </main>
 
-<footer class="kajene">
-    <p>© 2026 Sieriņi | Apģērbu meklētājs</p>
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
 </footer>
 
 </body>

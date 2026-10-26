@@ -1,95 +1,76 @@
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit search | THREADFINDER</title>
+    <title>Labot meklējumu | THREADFINDER</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <div class="site-header">
-    <nav th:replace="~{fragments :: navbar}"></nav>
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
 </div>
 
 <main class="container">
     <section class="hero history-hero">
-        <p class="eyebrow">UPDATE YOUR PREFERENCES</p>
-        <h1>Edit your<br><span>search.</span></h1>
-        <p class="hero-description">
-            Change the filters saved in your search history.
-        </p>
+        <p class="eyebrow">ATJAUNO SAVAS IZVĒLES</p>
+        <h1>Labot<br><span>meklējumu.</span></h1>
+        <p class="hero-description">Maini vēsturē saglabātos meklēšanas filtrus.</p>
     </section>
 
     <section class="filter-panel edit-panel">
-        <h2>Search filters</h2>
+        <h2>Meklēšanas filtri</h2>
 
-        <p class="error-message"
-           th:if="${errorMessage != null}"
-           th:text="${errorMessage}"></p>
+        <p class="error-message" th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
 
         <form th:action="@{/history/{id}/edit(id=${historyItem.id})}"
-              th:object="${filters}" method="post"
-              class="filter-form edit-form">
+              th:object="${filters}" method="post" class="filter-form edit-form">
 
             <div class="field">
-                <label for="category">Category</label>
+                <label for="category">Kategorija</label>
                 <select id="category" th:field="*{category}">
-                    <option value="">All categories</option>
-                    <option th:each="category : ${categories}"
-                            th:value="${category}"
-                            th:text="${category}"></option>
+                    <option value="">Visas kategorijas</option>
+                    <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
                 </select>
             </div>
 
             <div class="field">
-                <label for="color">Colour</label>
+                <label for="color">Krāsa</label>
                 <select id="color" th:field="*{color}">
-                    <option value="">All colours</option>
-                    <option th:each="color : ${colors}"
-                            th:value="${color}"
-                            th:text="${color}"></option>
+                    <option value="">Visas krāsas</option>
+                    <option th:each="c : ${colors}" th:value="${c}" th:text="${c}"></option>
                 </select>
             </div>
 
             <div class="field">
-                <label for="brand">Brand</label>
+                <label for="brand">Zīmols</label>
                 <select id="brand" th:field="*{brand}">
-                    <option value="">All brands</option>
-                    <option th:each="brand : ${brands}"
-                            th:value="${brand}"
-                            th:text="${brand}"></option>
+                    <option value="">Visi zīmoli</option>
+                    <option th:each="b : ${brands}" th:value="${b}" th:text="${b}"></option>
                 </select>
             </div>
 
             <div class="field">
-                <label for="minPrice">Min price (€)</label>
-                <input id="minPrice" type="number" step="0.01"
-                       min="0" th:field="*{minPrice}"
-                       placeholder="0.00">
+                <label for="minPrice">Cena no (€)</label>
+                <input id="minPrice" type="number" step="0.01" min="0"
+                       th:field="*{minPrice}" placeholder="0.00">
             </div>
 
             <div class="field">
-                <label for="maxPrice">Max price (€)</label>
-                <input id="maxPrice" type="number" step="0.01"
-                       min="0" th:field="*{maxPrice}"
-                       placeholder="Any">
+                <label for="maxPrice">Cena līdz (€)</label>
+                <input id="maxPrice" type="number" step="0.01" min="0"
+                       th:field="*{maxPrice}" placeholder="Jebkura">
             </div>
 
-            <button type="submit" class="primary-button">
-                Save changes
-            </button>
-
-            <a th:href="@{/templates/history}" class="secondary-button">
-                Cancel
-            </a>
+            <button type="submit" class="primary-button">Saglabāt</button>
+            <a th:href="@{/history}" class="secondary-button">Atcelt</a>
         </form>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>THREADFINDER — Find your own style.</p>
+    <p>THREADFINDER. Atrodi savu stilu.</p>
 </footer>
 
 </body>

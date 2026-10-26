@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="lv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profils | THREADFINDER</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="site-header">
+    <nav th:replace="~{search/fragments :: navbar}"></nav>
+</div>
+
+<main class="container">
+    <section class="hero history-hero">
+        <p class="eyebrow">TAVS KONTS</p>
+        <h1>Lietotāja<br><span>profils.</span></h1>
+    </section>
+
+    <section class="filter-panel edit-panel">
+        <p class="info-message mock-note">Prototips: profila labošana nav aktīva.</p>
+
+        <form class="filter-form edit-form" onsubmit="return false;">
+            <div class="field">
+                <label>Lietotājvārds</label>
+                <input type="text" th:value="${currentUser != null} ? ${currentUser.username} : 'viesis'" disabled>
+            </div>
+            <div class="field">
+                <label>E-pasts</label>
+                <input type="email" th:value="${currentUser != null} ? ${currentUser.email} : '—'" disabled>
+            </div>
+            <div class="field">
+                <label>Apģērba izmērs</label>
+                <select disabled><option>M</option></select>
+            </div>
+            <div class="field">
+                <label>Bikšu izmērs</label>
+                <select disabled><option>32/32</option></select>
+            </div>
+            <div class="field">
+                <label>Vēlamie zīmoli</label>
+                <input type="text" value="Zara, H&amp;M, Cropp" disabled>
+            </div>
+            <div class="field">
+                <label>Paziņojumi par cenām</label>
+                <select disabled><option>Ieslēgti</option></select>
+            </div>
+
+            <button type="button" class="primary-button" disabled>Saglabāt</button>
+            <a th:href="@{/admin}" class="secondary-button">Administratora panelis</a>
+        </form>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>THREADFINDER. Atrodi savu stilu.</p>
+</footer>
+
+</body>
+</html>

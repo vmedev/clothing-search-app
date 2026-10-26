@@ -1,9 +1,8 @@
-
 package lv.rtu.clothingsearchapp.service;
 
-import lv.rtu.clothingsearchapp.model.ClothingItem;
+import lv.rtu.clothingsearchapp.model.Product;
 import lv.rtu.clothingsearchapp.model.SearchFilters;
-import lv.rtu.clothingsearchapp.repository.ClothingItemRepository;
+import lv.rtu.clothingsearchapp.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,28 +11,25 @@ import java.util.Locale;
 @Service
 public class ClothingSearchService {
 
-    private final ClothingItemRepository repository;
+    private final ProductRepository repository;
 
-    public ClothingSearchService(ClothingItemRepository repository) {
+    public ClothingSearchService(ProductRepository repository) {
         this.repository = repository;
     }
 
-    public List<ClothingItem> search(SearchFilters filters) {
+    public List<Product> search(SearchFilters filters) {
         return repository.findAll().stream()
-                .filter(item -> matches(
-                        item.getCategory(), filters.getCategory()))
-                .filter(item -> matches(
-                        item.getColor(), filters.getColor()))
-                .filter(item -> matches(
-                        item.getBrand(), filters.getBrand()))
-                .filter(item -> filters.getMinPrice() == null
-                        || (item.getPrice() != null
-                        && item.getPrice().compareTo(
-                        filters.getMinPrice()) >= 0))
-                .filter(item -> filters.getMaxPrice() == null
-                        || (item.getPrice() != null
-                        && item.getPrice().compareTo(
-                        filters.getMaxPrice()) <= 0))
+                .filter(p -> matches(
+                        p.getCategory() != null ? p.getCategory().getName() : null,
+                        filters.getCategory()))
+                .filter(p -> matches(p.getColor(), filters.getColor()))
+                .filter(p -> matches(p.getBrand(), filters.getBrand()))
+                .filter(p -> filters.getMinPrice() == null
+                        || (p.getPrice() != null
+                        && p.getPrice().compareTo(filters.getMinPrice()) >= 0))
+                .filter(p -> filters.getMaxPrice() == null
+                        || (p.getPrice() != null
+                        && p.getPrice().compareTo(filters.getMaxPrice()) <= 0))
                 .toList();
     }
 
