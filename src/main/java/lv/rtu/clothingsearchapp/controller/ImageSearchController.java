@@ -38,6 +38,8 @@ public class ImageSearchController {
 
     private static final Set<String> ALLOWED_TYPES = Set.of("image/jpeg", "image/png", "image/webp");
     private static final Path UPLOAD_DIR = Paths.get("uploads");
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(ImageSearchController.class);
 
     private final AiVisionService aiVisionService;
     private final SimilarProductService similarProductService;
@@ -122,6 +124,7 @@ public class ImageSearchController {
         model.addAttribute("detected", d);
         model.addAttribute("products", products);
         model.addAttribute("savedToHistory", saved);
+        log.info("[UPLOAD] Atrastas preces: {}, saglabāts vēsturē: {}", products.size(), saved);
         return "search/upload";
     }
 

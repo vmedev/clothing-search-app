@@ -719,3 +719,9 @@ button:disabled {
         grid-column: 1;
     }
 }
+
+
+.dropzone.dragging {
+    border-color: var(--accent);
+    background: var(--soft-green);
+}

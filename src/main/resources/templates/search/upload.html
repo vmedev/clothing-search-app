@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meklēt pēc attēla | THREADFINDER</title>
+    <title>Meklēt pēc attēla | Apģērbu meklētājs</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -32,7 +32,7 @@
                          th:src="${imageUrl != null} ? @{${imageUrl}} : ''"
                          th:classappend="${imageUrl == null} ? 'hidden'">
                     <span id="dropzone-text" th:classappend="${imageUrl != null} ? 'hidden'">
-                        Noklikšķini, lai izvēlētos attēlu<br>
+                        Noklikšķini, ievelc vai ielīmē ar Ctrl+V<br>
                         <small>JPG, PNG vai WEBP, līdz 5 MB</small>
                     </span>
                 </label>
@@ -111,18 +111,55 @@
 </main>
 
 <footer class="site-footer">
-    <p>THREADFINDER. Atrodi savu stilu.</p>
+    <p>Apģērbu meklētājs. Atrodi savu stilu.</p>
 </footer>
 
 <script>
-    // Parāda izvēlētā attēla priekšskatījumu pirms augšupielādes
-    document.getElementById('image').addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const preview = document.getElementById('preview');
+    const input = document.getElementById('image');
+    const preview = document.getElementById('preview');
+    const dropText = document.getElementById('dropzone-text');
+    const dropzone = document.querySelector('.dropzone');
+
+    // Parāda attēla priekšskatījumu
+    function showPreview(file) {
         preview.src = URL.createObjectURL(file);
         preview.classList.remove('hidden');
-        document.getElementById('dropzone-text').classList.add('hidden');
+        dropText.classList.add('hidden');
+    }
+
+    // Ieliek failu formas laukā, lai to varētu nosūtīt
+    function setFile(file) {
+        const ext = file.type.split('/')[1] || 'png';
+        const dt = new DataTransfer();
+        dt.items.add(new File([file], 'attels.' + ext, { type: file.type }));
+        input.files = dt.files;
+        showPreview(file);
+    }
+
+    input.addEventListener('change', e => {
+        if (e.target.files[0]) showPreview(e.target.files[0]);
+    });
+
+    // Ctrl+V: attēla ielīmēšana no starpliktuves
+    document.addEventListener('paste', e => {
+        const item = [...e.clipboardData.items].find(i => i.type.startsWith('image/'));
+        if (item) {
+            e.preventDefault();
+            setFile(item.getAsFile());
+        }
+    });
+
+    // Attēla ievilkšana ar peli
+    dropzone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropzone.classList.add('dragging');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragging'));
+    dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('dragging');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) setFile(file);
     });
 </script>
 
